@@ -1,414 +1,787 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی</title>
-
-    <link rel="stylesheet" href="./index.css">
-    <script src="https://tapi.bale.ai/miniapp.js?1"></script>
-    <script src="/script.js"></script>
-</head>
-<body>
-    <div class="body">
-        <h1>User Data:</h1>
-        <p id="user_data"></p>
-
-        <h1>Callbacks:</h1>
-        <div>
-            <button id="close">close</button>
-            <button id="enableClosingConfirmation">enable closing confirmation</button>
-            <button id="expand">expand</button>
-            <button id="requestContact">request contact</button>
-        </div>
-    </div>
-</body>
-</html> -->
-
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>گیشه ۷ - Gisheh7</title>
-    <script src="https://tapi.bale.ai/miniapp.js?1"></script>
+    <title>Bale Mini App Sample</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --hint-color: #999999;
+            --link-color: #2481cc;
+            --button-color: #2481cc;
+            --button-text-color: #ffffff;
+            --secondary-bg-color: #f1f1f1;
+        }
 
-      body {
-        font-family: " Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, rgb(179, 38, 30) 0%, #58190d 100%);
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-      }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      .container {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 40px;
-        text-align: center;
-        max-width: 400px;
-        width: 100%;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-      }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Vazir', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
 
-      .logo {
-        width: 80px;
-        height: 80px;
-        margin: 0 auto 20px;
-        background: linear-gradient(45deg, rgb(179, 38, 30), #58190d);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 24px;
-        font-weight: bold;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-      }
-
-      h1 {
-        color: #333;
-        margin-bottom: 10px;
-        font-size: 28px;
-        font-weight: 700;
-      }
-
-      .subtitle {
-        color: #666;
-        margin-bottom: 30px;
-        font-size: 16px;
-        line-height: 1.5;
-      }
-
-      .user-info {
-        background: rgba(102, 126, 234, 0.1);
-        border-radius: 15px;
-        padding: 20px;
-        margin-bottom: 30px;
-        text-align: right;
-      }
-
-      .user-info h3 {
-        color: #333;
-        margin-bottom: 10px;
-        font-size: 18px;
-      }
-
-      .user-detail {
-        color: #555;
-        margin: 8px 0;
-        font-size: 14px;
-      }
-
-      .buttons {
-        font-family: " Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        font-size: "12px";
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .btn {
-        font-family: " Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        padding: 15px 25px;
-        border: none;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
-      }
-
-      .btn-primary {
-        background: linear-gradient(45deg, rgb(179, 38, 30), #58190d);
-        color: white;
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-      }
-
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
-      }
-
-      .btn-secondary {
-        background: rgba(102, 126, 234, 0.1);
-        color: rgb(179, 38, 30);
-        border: 2px solid rgb(179, 38, 30) 667eea;
-      }
-
-      .btn-secondary:hover {
-        background: rgb(179, 38, 30);
-        color: white;
-        transform: translateY(-2px);
-      }
-
-      .btn-danger {
-        background: rgba(255, 107, 107, 0.1);
-        color: #ff6b6b;
-        border: 2px solid #ff6b6b;
-      }
-
-      .btn-danger:hover {
-        background: #ff6b6b;
-        color: white;
-        transform: translateY(-2px);
-      }
-
-      .status {
-        margin-top: 20px;
-        padding: 10px;
-        border-radius: 8px;
-        font-size: 14px;
-        display: none;
-      }
-
-      .status.success {
-        background: rgba(72, 187, 120, 0.1);
-        color: #48bb78;
-        border: 1px solid rgba(72, 187, 120, 0.3);
-      }
-
-      .status.error {
-        background: rgba(255, 107, 107, 0.1);
-        color: #ff6b6b;
-        border: 1px solid rgba(255, 107, 107, 0.3);
-      }
-
-      @media (max-width: 480px) {
         .container {
-          padding: 30px 20px;
-          margin: 10px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .page {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1, h2 {
+            color: var(--text-color);
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         h1 {
-          font-size: 24px;
+            font-size: 24px;
+            font-weight: 600;
         }
-      }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .score-display {
+            background: var(--secondary-bg-color);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .score-display p {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--button-color);
+            color: var(--button-text-color);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-bg-color);
+            color: var(--text-color);
+        }
+
+        .btn-secondary:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+
+        .btn-large {
+            padding: 20px 32px;
+            font-size: 18px;
+            margin: 20px 0;
+        }
+
+        .btn-warning {
+            background-color: #ff9500;
+            color: white;
+        }
+
+        .btn-info {
+            background-color: #007aff;
+            color: white;
+        }
+
+        .btn-success {
+            background-color: #34c759;
+            color: white;
+        }
+
+        .game-content {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .game-content p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: var(--hint-color);
+        }
+
+        .current-score {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--secondary-bg-color);
+            border-radius: 8px;
+        }
+
+        .profile-info {
+            background: var(--secondary-bg-color);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .profile-info p {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .profile-info strong {
+            color: var(--text-color);
+        }
+
+        .settings-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--hint-color);
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--hint-color);
+            border-top: 2px solid var(--button-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Dark theme support */
+        [data-theme="dark"] {
+            --bg-color: #17212b;
+            --text-color: #ffffff;
+            --hint-color: #708499;
+            --link-color: #6ab7ff;
+            --button-color: #5288c1;
+            --button-text-color: #ffffff;
+            --secondary-bg-color: #232e3c;
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            h2 {
+                font-size: 18px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            
+            .btn-large {
+                padding: 16px 24px;
+                font-size: 16px;
+            }
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="container">
-      <img
-        alt="gisheh7"
-        style="height: 50px; width: 50px; border-radius: 50%"
-        src="https://assets.myket.ir/icons/xlarge/06342432-9241-4cf5-8c74-e926b998e82f.png"
-      />
-
-      <p class="subtitle">
-        دسترسی آسان به وبسایت گیشه ۷<br />برای خرید بلیط و خدمات
-      </p>
-
-      <!-- <div class="user-info" id="userInfo">
-        <h3>اطلاعات کاربر:</h3>
-        <div id="userData">در حال بارگذاری...</div>
-      </div> -->
-
-      <div class="buttons">
-        <button class="btn btn-primary" id="visitWebsite">
-          🌐 ورود به وبسایت گیشه ۷
-        </button>
-        <button class="btn btn-primary" id="visitCinema">📽️ سینماها</button>
-        <button class="btn btn-primary" id="visitMovies">📺 فیلم ها</button>
-        <button class="btn btn-primary" id="visitRoles">📝 قوانین</button>
-
-        <!-- <button class="btn btn-secondary" id="requestContact">
-                📱 اشتراک‌گذاری شماره تماس
-            </button> -->
-
-        <!-- <button class="btn btn-secondary" id="expand">
-          📱 بزرگ کردن نمایش
-        </button> -->
-
-        <button class="btn btn-danger" id="close">❌ بستن</button>
-      </div>
-
-      <div class="status" id="status"></div>
+        <div id="app">
+            <div class="loading">
+                در حال بارگذاری...
+            </div>
+        </div>
     </div>
 
     <script>
-      window.addEventListener("load", () => {
-        const userDataEl = document.querySelector("#userData");
-        const statusEl = document.querySelector("#status");
-
-        const visitWebsiteBtn = document.querySelector("#visitWebsite");
-        const visitMoviesBtn = document.querySelector("#visitMovies");
-
-        const visitCinemaBtn = document.querySelector("#visitCinema");
-        const visitRolesBtn = document.querySelector("#visitRoles");
-        const closeBtnEl = document.querySelector("#close");
-        const expandBtnEl = document.querySelector("#expand");
-        const requestContactBtnEl = document.querySelector("#requestContact");
-
-        function showStatus(message, isError = false) {
-          statusEl.textContent = message;
-          statusEl.className = `status ${isError ? "error" : "success"}`;
-          statusEl.style.display = "block";
-
-          setTimeout(() => {
-            statusEl.style.display = "none";
-          }, 3000);
+        // Bale Mini App SDK Types and Classes would go here
+        // For demo purposes, we'll create a mock Bale WebApp object
+        
+        // Mock Bale WebApp for testing outside of Bale
+        if (!window.Bale) {
+            window.Bale = {
+                WebApp: {
+                    initData: '',
+                    initDataUnsafe: {
+                        user: {
+                            id: 123456789,
+                            first_name: 'کاربر نمونه',
+                            last_name: 'تست',
+                            username: 'test_user',
+                            language_code: 'fa'
+                        },
+                        auth_date: Date.now(),
+                        hash: 'mock_hash'
+                    },
+                    version: '6.0',
+                    platform: 'web',
+                    colorScheme: 'light',
+                    themeParams: {
+                        bg_color: '#ffffff',
+                        text_color: '#000000',
+                        hint_color: '#999999',
+                        link_color: '#2481cc',
+                        button_color: '#2481cc',
+                        button_text_color: '#ffffff',
+                        secondary_bg_color: '#f1f1f1'
+                    },
+                    isExpanded: false,
+                    viewportHeight: window.innerHeight,
+                    viewportStableHeight: window.innerHeight,
+                    isClosingConfirmationEnabled: false,
+                    headerColor: '#2481cc',
+                    backgroundColor: '#ffffff',
+                    
+                    // Mock buttons
+                    MainButton: {
+                        text: '',
+                        isVisible: false,
+                        isActive: true,
+                        setText: function(text) { this.text = text; },
+                        onClick: function(callback) { this._callback = callback; },
+                        show: function() { this.isVisible = true; },
+                        hide: function() { this.isVisible = false; },
+                        enable: function() { this.isActive = true; },
+                        disable: function() { this.isActive = false; },
+                        showProgress: function() { this.isProgressVisible = true; },
+                        hideProgress: function() { this.isProgressVisible = false; }
+                    },
+                    
+                    BackButton: {
+                        isVisible: false,
+                        onClick: function(callback) { this._callback = callback; },
+                        show: function() { this.isVisible = true; },
+                        hide: function() { this.isVisible = false; }
+                    },
+                    
+                    SettingsButton: {
+                        isVisible: false,
+                        onClick: function(callback) { this._callback = callback; },
+                        show: function() { this.isVisible = true; },
+                        hide: function() { this.isVisible = false; }
+                    },
+                    
+                    HapticFeedback: {
+                        impactOccurred: function(style) { console.log('Haptic impact:', style); },
+                        notificationOccurred: function(type) { console.log('Haptic notification:', type); },
+                        selectionChanged: function() { console.log('Haptic selection changed'); }
+                    },
+                    
+                    CloudStorage: {
+                        setItem: function(key, value, callback) {
+                            localStorage.setItem('bale_' + key, value);
+                            if (callback) callback(null, true);
+                        },
+                        getItem: function(key, callback) {
+                            const value = localStorage.getItem('bale_' + key);
+                            callback(null, value);
+                        },
+                        removeItem: function(key, callback) {
+                            localStorage.removeItem('bale_' + key);
+                            if (callback) callback(null, true);
+                        },
+                        getKeys: function(callback) {
+                            const keys = Object.keys(localStorage).filter(k => k.startsWith('bale_')).map(k => k.substring(5));
+                            callback(null, keys);
+                        }
+                    },
+                    
+                    // Mock methods
+                    ready: function() { console.log('Bale WebApp ready'); },
+                    expand: function() { this.isExpanded = true; },
+                    close: function() { console.log('Closing mini app'); },
+                    setHeaderColor: function(color) { this.headerColor = color; },
+                    setBackgroundColor: function(color) { this.backgroundColor = color; },
+                    enableClosingConfirmation: function() { this.isClosingConfirmationEnabled = true; },
+                    disableClosingConfirmation: function() { this.isClosingConfirmationEnabled = false; },
+                    onEvent: function(eventType, eventHandler) { console.log('Event listener added:', eventType); },
+                    offEvent: function(eventType, eventHandler) { console.log('Event listener removed:', eventType); },
+                    sendData: function(data) { console.log('Sending data:', data); },
+                    openLink: function(url, options) { window.open(url, '_blank'); },
+                    showPopup: function(params, callback) {
+                        const result = confirm(params.message);
+                        if (callback) callback(result ? 'ok' : 'cancel');
+                    },
+                    showAlert: function(message, callback) {
+                        alert(message);
+                        if (callback) callback();
+                    },
+                    showConfirm: function(message, callback) {
+                        const result = confirm(message);
+                        if (callback) callback(result);
+                    },
+                    isVersionAtLeast: function(version) { return true; }
+                }
+            };
         }
 
-        try {
-          const user = window.Bale.WebApp.initDataUnsafe.user;
+        // Mini App Class Implementation
+        class BaleMiniApp {
+            constructor() {
+                this.webApp = window.Bale.WebApp;
+                this.isInitialized = false;
+                this.init();
+            }
 
-          if (user) {
-            userDataEl.innerHTML = `
-                        <div class="user-detail">🆔 شناسه: ${user.id}</div>
-                        <div class="user-detail">👤 نام: ${
-                          user.first_name || "نامشخص"
-                        }</div>
-                        <div class="user-detail">📝 نام کاربری: ${
-                          user.username ? "@" + user.username : "ندارد"
-                        }</div>
+            init() {
+                if (!this.webApp) {
+                    console.error('Bale WebApp is not available');
+                    return;
+                }
+
+                this.webApp.ready();
+                this.isInitialized = true;
+                this.setupTheme();
+                this.setupEventListeners();
+
+                console.log('Bale Mini App initialized', {
+                    version: this.webApp.version,
+                    platform: this.webApp.platform,
+                    user: this.webApp.initDataUnsafe.user,
+                });
+            }
+
+            setupTheme() {
+                const theme = this.webApp.themeParams;
+                document.documentElement.style.setProperty('--bg-color', theme.bg_color || '#ffffff');
+                document.documentElement.style.setProperty('--text-color', theme.text_color || '#000000');
+                document.documentElement.style.setProperty('--hint-color', theme.hint_color || '#999999');
+                document.documentElement.style.setProperty('--link-color', theme.link_color || '#2481cc');
+                document.documentElement.style.setProperty('--button-color', theme.button_color || '#2481cc');
+                document.documentElement.style.setProperty('--button-text-color', theme.button_text_color || '#ffffff');
+                document.documentElement.style.setProperty('--secondary-bg-color', theme.secondary_bg_color || '#f1f1f1');
+                
+                document.body.style.backgroundColor = theme.bg_color || '#ffffff';
+                document.body.style.color = theme.text_color || '#000000';
+            }
+
+            setupEventListeners() {
+                this.webApp.onEvent('themeChanged', () => {
+                    this.setupTheme();
+                });
+
+                this.webApp.onEvent('viewportChanged', () => {
+                    console.log('Viewport changed:', {
+                        height: this.webApp.viewportHeight,
+                        stableHeight: this.webApp.viewportStableHeight,
+                        isExpanded: this.webApp.isExpanded,
+                    });
+                });
+
+                this.webApp.MainButton.onClick(() => {
+                    this.handleMainButtonClick();
+                });
+
+                this.webApp.BackButton.onClick(() => {
+                    this.handleBackButtonClick();
+                });
+
+                this.webApp.SettingsButton.onClick(() => {
+                    this.handleSettingsButtonClick();
+                });
+            }
+
+            getCurrentUser() {
+                return this.webApp.initDataUnsafe.user;
+            }
+
+            getCurrentChat() {
+                return this.webApp.initDataUnsafe.chat;
+            }
+
+            getTheme() {
+                return this.webApp.themeParams;
+            }
+
+            expand() {
+                this.webApp.expand();
+            }
+
+            close() {
+                this.webApp.close();
+            }
+
+            showMainButton(text, onClick) {
+                this.webApp.MainButton.setText(text);
+                this.webApp.MainButton.show();
+                
+                if (onClick) {
+                    this.webApp.MainButton.onClick(onClick);
+                }
+            }
+
+            hideMainButton() {
+                this.webApp.MainButton.hide();
+            }
+
+            showBackButton(onClick) {
+                this.webApp.BackButton.show();
+                
+                if (onClick) {
+                    this.webApp.BackButton.onClick(onClick);
+                }
+            }
+
+            hideBackButton() {
+                this.webApp.BackButton.hide();
+            }
+
+            showAlert(message) {
+                return new Promise((resolve) => {
+                    this.webApp.showAlert(message, resolve);
+                });
+            }
+
+            showConfirm(message) {
+                return new Promise((resolve) => {
+                    this.webApp.showConfirm(message, resolve);
+                });
+            }
+
+            showPopup(params) {
+                return new Promise((resolve) => {
+                    this.webApp.showPopup(params, resolve);
+                });
+            }
+
+            hapticFeedback(type) {
+                if (['light', 'medium', 'heavy'].includes(type)) {
+                    this.webApp.HapticFeedback.impactOccurred(type);
+                } else {
+                    this.webApp.HapticFeedback.notificationOccurred(type);
+                }
+            }
+
+            sendData(data) {
+                this.webApp.sendData(JSON.stringify(data));
+            }
+
+            openLink(url, options) {
+                this.webApp.openLink(url, options);
+            }
+
+            setCloudData(key, value) {
+                return new Promise((resolve, reject) => {
+                    this.webApp.CloudStorage.setItem(key, value, (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result || false);
+                        }
+                    });
+                });
+            }
+
+            getCloudData(key) {
+                return new Promise((resolve, reject) => {
+                    this.webApp.CloudStorage.getItem(key, (error, value) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(value || null);
+                        }
+                    });
+                });
+            }
+
+            getCloudKeys() {
+                return new Promise((resolve, reject) => {
+                    this.webApp.CloudStorage.getKeys((error, keys) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(keys || []);
+                        }
+                    });
+                });
+            }
+
+            handleMainButtonClick() {
+                console.log('Main button clicked');
+            }
+
+            handleBackButtonClick() {
+                console.log('Back button clicked');
+            }
+
+            handleSettingsButtonClick() {
+                console.log('Settings button clicked');
+            }
+        }
+
+        // Sample Mini App Implementation
+        class SampleMiniApp extends BaleMiniApp {
+            constructor() {
+                super();
+                this.currentPage = 'home';
+                this.userScore = 0;
+                this.initializeApp();
+            }
+
+            async initializeApp() {
+                try {
+                    const savedScore = await this.getCloudData('userScore');
+                    if (savedScore) {
+                        this.userScore = parseInt(savedScore, 10);
+                    }
+                } catch (error) {
+                    console.error('Failed to load user data:', error);
+                }
+
+                this.renderHomePage();
+                this.showMainButton('شروع بازی', () => this.startGame());
+            }
+
+            renderHomePage() {
+                this.currentPage = 'home';
+                
+                const user = this.getCurrentUser();
+                const app = document.getElementById('app');
+                
+                if (app) {
+                    app.innerHTML = `
+                        <div class="page home-page">
+                            <h1>خوش آمدید ${user?.first_name || 'کاربر'}</h1>
+                            <div class="score-display">
+                                <p>امتیاز شما: ${this.userScore}</p>
+                            </div>
+                            <div class="actions">
+                                <button class="btn btn-primary" onclick="window.miniApp.startGame()">شروع بازی</button>
+                                <button class="btn btn-secondary" onclick="window.miniApp.showProfile()">پروفایل</button>
+                                <button class="btn btn-secondary" onclick="window.miniApp.showSettings()">تنظیمات</button>
+                            </div>
+                        </div>
                     `;
-          } else {
-            userDataEl.innerHTML =
-              '<div class="user-detail">اطلاعات کاربر در دسترس نیست</div>';
-          }
-        } catch (error) {
-          userDataEl.innerHTML =
-            '<div class="user-detail">خطا در بارگذاری اطلاعات کاربر</div>';
-          console.error("Error loading user data:", error);
+                }
+            }
+
+            renderGamePage() {
+                this.currentPage = 'game';
+                
+                const app = document.getElementById('app');
+                if (app) {
+                    app.innerHTML = `
+                        <div class="page game-page">
+                            <h2>بازی ساده</h2>
+                            <div class="game-content">
+                                <p>روی دکمه زیر کلیک کنید تا امتیاز کسب کنید!</p>
+                                <button class="btn btn-large btn-primary" onclick="window.miniApp.earnPoints()">
+                                    کلیک کنید! 🎯
+                                </button>
+                                <div class="current-score">
+                                    <p>امتیاز فعلی: ${this.userScore}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                this.showBackButton(() => this.goBack());
+                this.showMainButton('ذخیره و خروج', () => this.saveAndExit());
+            }
+
+            renderProfilePage() {
+                this.currentPage = 'profile';
+                
+                const user = this.getCurrentUser();
+                const app = document.getElementById('app');
+                
+                if (app) {
+                    app.innerHTML = `
+                        <div class="page profile-page">
+                            <h2>پروفایل کاربری</h2>
+                            <div class="profile-info">
+                                <p><strong>نام:</strong> ${user?.first_name || 'نامشخص'}</p>
+                                <p><strong>نام خانوادگی:</strong> ${user?.last_name || 'نامشخص'}</p>
+                                <p><strong>نام کاربری:</strong> ${user?.username || 'ندارد'}</p>
+                                <p><strong>آی‌دی:</strong> ${user?.id || 'نامشخص'}</p>
+                                <p><strong>امتیاز کل:</strong> ${this.userScore}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                this.showBackButton(() => this.goBack());
+            }
+
+            renderSettingsPage() {
+                this.currentPage = 'settings';
+                
+                const app = document.getElementById('app');
+                if (app) {
+                    app.innerHTML = `
+                        <div class="page settings-page">
+                            <h2>تنظیمات</h2>
+                            <div class="settings-content">
+                                <button class="btn btn-warning" onclick="window.miniApp.resetScore()">
+                                    ریست کردن امتیاز
+                                </button>
+                                <button class="btn btn-info" onclick="window.miniApp.showAppInfo()">
+                                    درباره اپلیکیشن
+                                </button>
+                                <button class="btn btn-success" onclick="window.miniApp.testHaptic()">
+                                    تست ارتعاش
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                this.showBackButton(() => this.goBack());
+            }
+
+            startGame() {
+                this.hapticFeedback('light');
+                this.renderGamePage();
+            }
+
+            showProfile() {
+                this.hapticFeedback('light');
+                this.renderProfilePage();
+            }
+
+            showSettings() {
+                this.hapticFeedback('light');
+                this.renderSettingsPage();
+            }
+
+            async earnPoints() {
+                this.userScore += 10;
+                this.hapticFeedback('success');
+                
+                const scoreElement = document.querySelector('.current-score p');
+                if (scoreElement) {
+                    scoreElement.textContent = `امتیاز فعلی: ${this.userScore}`;
+                }
+                
+                try {
+                    await this.setCloudData('userScore', this.userScore.toString());
+                } catch (error) {
+                    console.error('Failed to save score:', error);
+                }
+            }
+
+            async resetScore() {
+                const confirmed = await this.showConfirm('آیا مطمئن هستید که می‌خواهید امتیاز خود را ریست کنید؟');
+                
+                if (confirmed) {
+                    this.userScore = 0;
+                    this.hapticFeedback('warning');
+                    
+                    try {
+                        await this.setCloudData('userScore', '0');
+                        await this.showAlert('امتیاز با موفقیت ریست شد!');
+                        this.renderSettingsPage();
+                    } catch (error) {
+                        console.error('Failed to reset score:', error);
+                        await this.showAlert('خطا در ریست کردن امتیاز');
+                    }
+                }
+            }
+
+            async showAppInfo() {
+                await this.showPopup({
+                    title: 'درباره اپلیکیشن',
+                    message: 'این یک مینی اپ نمونه برای بال است که با TypeScript نوشته شده است.',
+                    buttons: [
+                        { type: 'ok', text: 'متوجه شدم' }
+                    ]
+                });
+            }
+
+            testHaptic() {
+                this.hapticFeedback('heavy');
+            }
+
+            async saveAndExit() {
+                try {
+                    await this.setCloudData('userScore', this.userScore.toString());
+                    await this.showAlert('امتیاز ذخیره شد!');
+                    this.close();
+                } catch (error) {
+                    console.error('Failed to save:', error);
+                    await this.showAlert('خطا در ذخیره سازی');
+                }
+            }
+
+            goBack() {
+                this.hapticFeedback('light');
+                this.renderHomePage();
+                this.hideBackButton();
+                this.showMainButton('شروع بازی', () => this.startGame());
+            }
+
+            handleMainButtonClick() {
+                console.log('Main button clicked on page:', this.currentPage);
+            }
+
+            handleBackButtonClick() {
+                this.goBack();
+            }
+
+            handleSettingsButtonClick() {
+                this.showSettings();
+            }
         }
 
-        try {
-          window.Bale.WebApp.SettingsButton.show();
-
-          // Handle onClick event on SettingsButton
-          window.Bale.WebApp.onEvent("settingsButtonPressed", () => {
-            showStatus("دکمه تنظیمات فشرده شد");
-            console.log("Settings button pressed");
-          });
-        } catch (error) {
-          console.error("Error with settings button:", error);
-        }
-
-        visitWebsiteBtn.addEventListener("click", () => {
-          try {
-            window.Bale.WebApp.openLink("https://gisheh7.ir");
-            showStatus("در حال هدایت به وبسایت گیشه ۷...");
-          } catch (error) {
-            try {
-              window.open("https://gisheh7.ir", "_blank");
-              showStatus("وبسایت در تب جدید باز شد");
-            } catch (fallbackError) {
-              showStatus("خطا در باز کردن وبسایت", true);
-              console.error("Error opening website:", error, fallbackError);
-            }
-          }
+        // Initialize the mini app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const miniApp = new SampleMiniApp();
+            window.miniApp = miniApp;
         });
-        visitCinemaBtn.addEventListener("click", () => {
-          try {
-            window.Bale.WebApp.openLink("https://gisheh7.ir/cinema/");
-            showStatus("در حال هدایت به سینماهای گیشه ۷...");
-          } catch (error) {
-            try {
-              window.open("https://gisheh7.ir/cinema/", "_blank");
-              showStatus("وبسایت در تب جدید باز شد");
-            } catch (fallbackError) {
-              showStatus("خطا در باز کردن وبسایت", true);
-              console.error("Error opening website:", error, fallbackError);
-            }
-          }
-        });
-        visitRolesBtn.addEventListener("click", () => {
-          try {
-            window.Bale.WebApp.openLink("https://gisheh7.ir/terms/");
-            showStatus("در حال هدایت به وبسایت گیشه ۷...");
-          } catch (error) {
-            try {
-              window.open("https://gisheh7.ir/terms/", "_blank");
-              showStatus("وبسایت در تب جدید باز شد");
-            } catch (fallbackError) {
-              showStatus("خطا در باز کردن وبسایت", true);
-              console.error("Error opening website:", error, fallbackError);
-            }
-          }
-        });
-        visitMoviesBtn.addEventListener("click", () => {
-          try {
-            window.Bale.WebApp.openLink("https://gisheh7.ir/event/iranian/");
-            showStatus("در حال هدایت به وبسایت گیشه ۷...");
-          } catch (error) {
-            try {
-              window.open("https://gisheh7.ir/event/iranian/", "_blank");
-              showStatus("وبسایت در تب جدید باز شد");
-            } catch (fallbackError) {
-              showStatus("خطا در باز کردن وبسایت", true);
-              console.error("Error opening website:", error, fallbackError);
-            }
-          }
-        });
-
-        closeBtnEl.addEventListener("click", () => {
-          try {
-            window.Bale.WebApp.close();
-          } catch (error) {
-            showStatus("خطا در بستن اپلیکیشن", true);
-            console.error("Error closing app:", error);
-          }
-        });
-
-        requestContactBtnEl.addEventListener("click", () => {
-          try {
-            window.Bale.WebApp.requestContact((wasShared) => {
-              const message = wasShared
-                ? "شماره تماس با موفقیت اشتراک‌گذاری شد"
-                : "شماره تماس اشتراک‌گذاری نشد";
-              showStatus(message);
-              console.log("Contact request:", wasShared);
-            });
-
-            window.Bale.WebApp.onEvent("contactRequested", (event) => {
-              const wasShared = event.status === "sent";
-              const message = wasShared
-                ? "شماره تماس دریافت شد"
-                : "دریافت شماره تماس لغو شد";
-              showStatus(message);
-              console.log("Contact event:", event);
-            });
-          } catch (error) {
-            showStatus("خطا در درخواست شماره تماس", true);
-            console.error("Error requesting contact:", error);
-          }
-        });
-
-        expandBtnEl.addEventListener("click", () => {
-          try {
-            window.Bale.WebApp.expand();
-            showStatus("نمایش بزرگ شد");
-          } catch (error) {
-            showStatus("خطا در بزرگ کردن نمایش", true);
-            console.error("Error expanding:", error);
-          }
-        });
-
-        try {
-          window.Bale.WebApp.enableClosingConfirmation();
-        } catch (error) {
-          console.error("Error enabling closing confirmation:", error);
-        }
-
-        window.Bale.WebApp.onEvent("backButtonPressed", () => {
-          showStatus("دکمه بازگشت فشرده شد");
-          // You can add custom back button logic here
-        });
-
-        showStatus("مینی‌اپ گیشه ۷ آماده است");
-      });
     </script>
-  </body>
+</body>
 </html>
