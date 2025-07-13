@@ -1,0 +1,414 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی</title>
+
+    <link rel="stylesheet" href="./index.css">
+    <script src="https://tapi.bale.ai/miniapp.js?1"></script>
+    <script src="/script.js"></script>
+</head>
+<body>
+    <div class="body">
+        <h1>User Data:</h1>
+        <p id="user_data"></p>
+
+        <h1>Callbacks:</h1>
+        <div>
+            <button id="close">close</button>
+            <button id="enableClosingConfirmation">enable closing confirmation</button>
+            <button id="expand">expand</button>
+            <button id="requestContact">request contact</button>
+        </div>
+    </div>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>گیشه ۷ - Gisheh7</title>
+    <script src="https://tapi.bale.ai/miniapp.js?1"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: " Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, rgb(179, 38, 30) 0%, #58190d 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        background: linear-gradient(45deg, rgb(179, 38, 30), #58190d);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 28px;
+        font-weight: 700;
+      }
+
+      .subtitle {
+        color: #666;
+        margin-bottom: 30px;
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      .user-info {
+        background: rgba(102, 126, 234, 0.1);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+        text-align: right;
+      }
+
+      .user-info h3 {
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 18px;
+      }
+
+      .user-detail {
+        color: #555;
+        margin: 8px 0;
+        font-size: 14px;
+      }
+
+      .buttons {
+        font-family: " Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: "12px";
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .btn {
+        font-family: " Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        padding: 15px 25px;
+        border: none;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-primary {
+        background: linear-gradient(45deg, rgb(179, 38, 30), #58190d);
+        color: white;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+      }
+
+      .btn-secondary {
+        background: rgba(102, 126, 234, 0.1);
+        color: rgb(179, 38, 30);
+        border: 2px solid rgb(179, 38, 30) 667eea;
+      }
+
+      .btn-secondary:hover {
+        background: rgb(179, 38, 30);
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .btn-danger {
+        background: rgba(255, 107, 107, 0.1);
+        color: #ff6b6b;
+        border: 2px solid #ff6b6b;
+      }
+
+      .btn-danger:hover {
+        background: #ff6b6b;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .status {
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 14px;
+        display: none;
+      }
+
+      .status.success {
+        background: rgba(72, 187, 120, 0.1);
+        color: #48bb78;
+        border: 1px solid rgba(72, 187, 120, 0.3);
+      }
+
+      .status.error {
+        background: rgba(255, 107, 107, 0.1);
+        color: #ff6b6b;
+        border: 1px solid rgba(255, 107, 107, 0.3);
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 30px 20px;
+          margin: 10px;
+        }
+
+        h1 {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        alt="gisheh7"
+        style="height: 50px; width: 50px; border-radius: 50%"
+        src="https://assets.myket.ir/icons/xlarge/06342432-9241-4cf5-8c74-e926b998e82f.png"
+      />
+
+      <p class="subtitle">
+        دسترسی آسان به وبسایت گیشه ۷<br />برای خرید بلیط و خدمات
+      </p>
+
+      <!-- <div class="user-info" id="userInfo">
+        <h3>اطلاعات کاربر:</h3>
+        <div id="userData">در حال بارگذاری...</div>
+      </div> -->
+
+      <div class="buttons">
+        <button class="btn btn-primary" id="visitWebsite">
+          🌐 ورود به وبسایت گیشه ۷
+        </button>
+        <button class="btn btn-primary" id="visitCinema">📽️ سینماها</button>
+        <button class="btn btn-primary" id="visitMovies">📺 فیلم ها</button>
+        <button class="btn btn-primary" id="visitRoles">📝 قوانین</button>
+
+        <!-- <button class="btn btn-secondary" id="requestContact">
+                📱 اشتراک‌گذاری شماره تماس
+            </button> -->
+
+        <!-- <button class="btn btn-secondary" id="expand">
+          📱 بزرگ کردن نمایش
+        </button> -->
+
+        <button class="btn btn-danger" id="close">❌ بستن</button>
+      </div>
+
+      <div class="status" id="status"></div>
+    </div>
+
+    <script>
+      window.addEventListener("load", () => {
+        const userDataEl = document.querySelector("#userData");
+        const statusEl = document.querySelector("#status");
+
+        const visitWebsiteBtn = document.querySelector("#visitWebsite");
+        const visitMoviesBtn = document.querySelector("#visitMovies");
+
+        const visitCinemaBtn = document.querySelector("#visitCinema");
+        const visitRolesBtn = document.querySelector("#visitRoles");
+        const closeBtnEl = document.querySelector("#close");
+        const expandBtnEl = document.querySelector("#expand");
+        const requestContactBtnEl = document.querySelector("#requestContact");
+
+        function showStatus(message, isError = false) {
+          statusEl.textContent = message;
+          statusEl.className = `status ${isError ? "error" : "success"}`;
+          statusEl.style.display = "block";
+
+          setTimeout(() => {
+            statusEl.style.display = "none";
+          }, 3000);
+        }
+
+        try {
+          const user = window.Bale.WebApp.initDataUnsafe.user;
+
+          if (user) {
+            userDataEl.innerHTML = `
+                        <div class="user-detail">🆔 شناسه: ${user.id}</div>
+                        <div class="user-detail">👤 نام: ${
+                          user.first_name || "نامشخص"
+                        }</div>
+                        <div class="user-detail">📝 نام کاربری: ${
+                          user.username ? "@" + user.username : "ندارد"
+                        }</div>
+                    `;
+          } else {
+            userDataEl.innerHTML =
+              '<div class="user-detail">اطلاعات کاربر در دسترس نیست</div>';
+          }
+        } catch (error) {
+          userDataEl.innerHTML =
+            '<div class="user-detail">خطا در بارگذاری اطلاعات کاربر</div>';
+          console.error("Error loading user data:", error);
+        }
+
+        try {
+          window.Bale.WebApp.SettingsButton.show();
+
+          // Handle onClick event on SettingsButton
+          window.Bale.WebApp.onEvent("settingsButtonPressed", () => {
+            showStatus("دکمه تنظیمات فشرده شد");
+            console.log("Settings button pressed");
+          });
+        } catch (error) {
+          console.error("Error with settings button:", error);
+        }
+
+        visitWebsiteBtn.addEventListener("click", () => {
+          try {
+            window.Bale.WebApp.openLink("https://gisheh7.ir");
+            showStatus("در حال هدایت به وبسایت گیشه ۷...");
+          } catch (error) {
+            try {
+              window.open("https://gisheh7.ir", "_blank");
+              showStatus("وبسایت در تب جدید باز شد");
+            } catch (fallbackError) {
+              showStatus("خطا در باز کردن وبسایت", true);
+              console.error("Error opening website:", error, fallbackError);
+            }
+          }
+        });
+        visitCinemaBtn.addEventListener("click", () => {
+          try {
+            window.Bale.WebApp.openLink("https://gisheh7.ir/cinema/");
+            showStatus("در حال هدایت به سینماهای گیشه ۷...");
+          } catch (error) {
+            try {
+              window.open("https://gisheh7.ir/cinema/", "_blank");
+              showStatus("وبسایت در تب جدید باز شد");
+            } catch (fallbackError) {
+              showStatus("خطا در باز کردن وبسایت", true);
+              console.error("Error opening website:", error, fallbackError);
+            }
+          }
+        });
+        visitRolesBtn.addEventListener("click", () => {
+          try {
+            window.Bale.WebApp.openLink("https://gisheh7.ir/terms/");
+            showStatus("در حال هدایت به وبسایت گیشه ۷...");
+          } catch (error) {
+            try {
+              window.open("https://gisheh7.ir/terms/", "_blank");
+              showStatus("وبسایت در تب جدید باز شد");
+            } catch (fallbackError) {
+              showStatus("خطا در باز کردن وبسایت", true);
+              console.error("Error opening website:", error, fallbackError);
+            }
+          }
+        });
+        visitMoviesBtn.addEventListener("click", () => {
+          try {
+            window.Bale.WebApp.openLink("https://gisheh7.ir/event/iranian/");
+            showStatus("در حال هدایت به وبسایت گیشه ۷...");
+          } catch (error) {
+            try {
+              window.open("https://gisheh7.ir/event/iranian/", "_blank");
+              showStatus("وبسایت در تب جدید باز شد");
+            } catch (fallbackError) {
+              showStatus("خطا در باز کردن وبسایت", true);
+              console.error("Error opening website:", error, fallbackError);
+            }
+          }
+        });
+
+        closeBtnEl.addEventListener("click", () => {
+          try {
+            window.Bale.WebApp.close();
+          } catch (error) {
+            showStatus("خطا در بستن اپلیکیشن", true);
+            console.error("Error closing app:", error);
+          }
+        });
+
+        requestContactBtnEl.addEventListener("click", () => {
+          try {
+            window.Bale.WebApp.requestContact((wasShared) => {
+              const message = wasShared
+                ? "شماره تماس با موفقیت اشتراک‌گذاری شد"
+                : "شماره تماس اشتراک‌گذاری نشد";
+              showStatus(message);
+              console.log("Contact request:", wasShared);
+            });
+
+            window.Bale.WebApp.onEvent("contactRequested", (event) => {
+              const wasShared = event.status === "sent";
+              const message = wasShared
+                ? "شماره تماس دریافت شد"
+                : "دریافت شماره تماس لغو شد";
+              showStatus(message);
+              console.log("Contact event:", event);
+            });
+          } catch (error) {
+            showStatus("خطا در درخواست شماره تماس", true);
+            console.error("Error requesting contact:", error);
+          }
+        });
+
+        expandBtnEl.addEventListener("click", () => {
+          try {
+            window.Bale.WebApp.expand();
+            showStatus("نمایش بزرگ شد");
+          } catch (error) {
+            showStatus("خطا در بزرگ کردن نمایش", true);
+            console.error("Error expanding:", error);
+          }
+        });
+
+        try {
+          window.Bale.WebApp.enableClosingConfirmation();
+        } catch (error) {
+          console.error("Error enabling closing confirmation:", error);
+        }
+
+        window.Bale.WebApp.onEvent("backButtonPressed", () => {
+          showStatus("دکمه بازگشت فشرده شد");
+          // You can add custom back button logic here
+        });
+
+        showStatus("مینی‌اپ گیشه ۷ آماده است");
+      });
+    </script>
+  </body>
+</html>
