@@ -210,10 +210,10 @@
         دسترسی آسان به وبسایت گیشه ۷<br />برای خرید بلیط و خدمات
       </p>
 
-      <!-- <div class="user-info" id="userInfo">
+      <div class="user-info" id="userInfo">
         <h3>اطلاعات کاربر:</h3>
         <div id="userData">در حال بارگذاری...</div>
-      </div> -->
+      </div>
 
       <div class="buttons">
         <button class="btn btn-primary" id="visitWebsite">
@@ -275,12 +275,10 @@
                         }</div>
                     `;
           } else {
-            userDataEl.innerHTML =
-              '<div class="user-detail">اطلاعات کاربر در دسترس نیست</div>';
+            userDataEl.innerHTML = '<div class="user-detail">اطلاعات کاربر در دسترس نیست</div>';
           }
         } catch (error) {
-          userDataEl.innerHTML =
-            '<div class="user-detail">خطا در بارگذاری اطلاعات کاربر</div>';
+          userDataEl.innerHTML = '<div class="user-detail">خطا در بارگذاری اطلاعات کاربر</div>';
           console.error("Error loading user data:", error);
         }
 
