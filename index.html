@@ -1,30 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی</title>
-
-    <link rel="stylesheet" href="./index.css">
-    <script src="https://tapi.bale.ai/miniapp.js?1"></script>
-    <script src="/script.js"></script>
-</head>
-<body>
-    <div class="body">
-        <h1>User Data:</h1>
-        <p id="user_data"></p>
-
-        <h1>Callbacks:</h1>
-        <div>
-            <button id="close">close</button>
-            <button id="enableClosingConfirmation">enable closing confirmation</button>
-            <button id="expand">expand</button>
-            <button id="requestContact">request contact</button>
-        </div>
-    </div>
-</body>
-</html> -->
-
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
   <head>
@@ -261,6 +234,31 @@
           }, 3000);
         }
 
+        // Helper function to open links in Bale's internal browser
+        function openInBaleInternal(url) {
+          try {
+            // Use try_instant_views: true to open in Bale's internal browser
+            window.Bale.WebApp.openLink(url, { try_instant_views: true });
+            showStatus("در حال باز کردن در مرورگر داخلی بله...");
+          } catch (error) {
+            console.error("Error opening in Bale internal browser:", error);
+            // Fallback to regular openLink
+            try {
+              window.Bale.WebApp.openLink(url);
+              showStatus("در حال باز کردن پیوند...");
+            } catch (fallbackError) {
+              // Final fallback to window.open
+              try {
+                window.open(url, "_blank");
+                showStatus("وبسایت در تب جدید باز شد");
+              } catch (finalError) {
+                showStatus("خطا در باز کردن وبسایت", true);
+                console.error("All methods failed:", error, fallbackError, finalError);
+              }
+            }
+          }
+        }
+
         try {
           const user = window.Bale.WebApp.initDataUnsafe.user;
 
@@ -294,61 +292,21 @@
           console.error("Error with settings button:", error);
         }
 
+        // Updated event listeners to use internal browser
         visitWebsiteBtn.addEventListener("click", () => {
-          try {
-            window.Bale.WebApp.openLink("https://gisheh7.ir");
-            showStatus("در حال هدایت به وبسایت گیشه ۷...");
-          } catch (error) {
-            try {
-              window.open("https://gisheh7.ir", "_blank");
-              showStatus("وبسایت در تب جدید باز شد");
-            } catch (fallbackError) {
-              showStatus("خطا در باز کردن وبسایت", true);
-              console.error("Error opening website:", error, fallbackError);
-            }
-          }
+          openInBaleInternal("https://gisheh7.ir");
         });
+
         visitCinemaBtn.addEventListener("click", () => {
-          try {
-            window.Bale.WebApp.openLink("https://gisheh7.ir/cinema/");
-            showStatus("در حال هدایت به سینماهای گیشه ۷...");
-          } catch (error) {
-            try {
-              window.open("https://gisheh7.ir/cinema/", "_blank");
-              showStatus("وبسایت در تب جدید باز شد");
-            } catch (fallbackError) {
-              showStatus("خطا در باز کردن وبسایت", true);
-              console.error("Error opening website:", error, fallbackError);
-            }
-          }
+          openInBaleInternal("https://gisheh7.ir/cinema/");
         });
+
         visitRolesBtn.addEventListener("click", () => {
-          try {
-            window.Bale.WebApp.openLink("https://gisheh7.ir/terms/");
-            showStatus("در حال هدایت به وبسایت گیشه ۷...");
-          } catch (error) {
-            try {
-              window.open("https://gisheh7.ir/terms/", "_blank");
-              showStatus("وبسایت در تب جدید باز شد");
-            } catch (fallbackError) {
-              showStatus("خطا در باز کردن وبسایت", true);
-              console.error("Error opening website:", error, fallbackError);
-            }
-          }
+          openInBaleInternal("https://gisheh7.ir/terms/");
         });
+
         visitMoviesBtn.addEventListener("click", () => {
-          try {
-            window.Bale.WebApp.openLink("https://gisheh7.ir/event/iranian/");
-            showStatus("در حال هدایت به وبسایت گیشه ۷...");
-          } catch (error) {
-            try {
-              window.open("https://gisheh7.ir/event/iranian/", "_blank");
-              showStatus("وبسایت در تب جدید باز شد");
-            } catch (fallbackError) {
-              showStatus("خطا در باز کردن وبسایت", true);
-              console.error("Error opening website:", error, fallbackError);
-            }
-          }
+          openInBaleInternal("https://gisheh7.ir/event/iranian/");
         });
 
         closeBtnEl.addEventListener("click", () => {
@@ -360,39 +318,43 @@
           }
         });
 
-        requestContactBtnEl.addEventListener("click", () => {
-          try {
-            window.Bale.WebApp.requestContact((wasShared) => {
-              const message = wasShared
-                ? "شماره تماس با موفقیت اشتراک‌گذاری شد"
-                : "شماره تماس اشتراک‌گذاری نشد";
-              showStatus(message);
-              console.log("Contact request:", wasShared);
-            });
+        if (requestContactBtnEl) {
+          requestContactBtnEl.addEventListener("click", () => {
+            try {
+              window.Bale.WebApp.requestContact((wasShared) => {
+                const message = wasShared
+                  ? "شماره تماس با موفقیت اشتراک‌گذاری شد"
+                  : "شماره تماس اشتراک‌گذاری نشد";
+                showStatus(message);
+                console.log("Contact request:", wasShared);
+              });
 
-            window.Bale.WebApp.onEvent("contactRequested", (event) => {
-              const wasShared = event.status === "sent";
-              const message = wasShared
-                ? "شماره تماس دریافت شد"
-                : "دریافت شماره تماس لغو شد";
-              showStatus(message);
-              console.log("Contact event:", event);
-            });
-          } catch (error) {
-            showStatus("خطا در درخواست شماره تماس", true);
-            console.error("Error requesting contact:", error);
-          }
-        });
+              window.Bale.WebApp.onEvent("contactRequested", (event) => {
+                const wasShared = event.status === "sent";
+                const message = wasShared
+                  ? "شماره تماس دریافت شد"
+                  : "دریافت شماره تماس لغو شد";
+                showStatus(message);
+                console.log("Contact event:", event);
+              });
+            } catch (error) {
+              showStatus("خطا در درخواست شماره تماس", true);
+              console.error("Error requesting contact:", error);
+            }
+          });
+        }
 
-        expandBtnEl.addEventListener("click", () => {
-          try {
-            window.Bale.WebApp.expand();
-            showStatus("نمایش بزرگ شد");
-          } catch (error) {
-            showStatus("خطا در بزرگ کردن نمایش", true);
-            console.error("Error expanding:", error);
-          }
-        });
+        if (expandBtnEl) {
+          expandBtnEl.addEventListener("click", () => {
+            try {
+              window.Bale.WebApp.expand();
+              showStatus("نمایش بزرگ شد");
+            } catch (error) {
+              showStatus("خطا در بزرگ کردن نمایش", true);
+              console.error("Error expanding:", error);
+            }
+          });
+        }
 
         try {
           window.Bale.WebApp.enableClosingConfirmation();
